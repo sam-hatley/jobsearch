@@ -1,2 +1,4 @@
 config.py
 uk.protonvpn.net.udp.ovpn
+*.env
+test.py
