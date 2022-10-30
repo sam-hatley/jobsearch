@@ -3,3 +3,5 @@ uk.protonvpn.net.udp.ovpn
 *.env
 test.py
 *.pyc
+*.csv
+*.pkl
