@@ -1,16 +1,6 @@
 import urllib
 import cloudscraper
 from bs4 import BeautifulSoup
-import random
-
-
-def select_agent():
-    '''Randomly selects a useragent from a list of 28'''
-
-    # Read a list of user agents and randomly select one line from the list
-    with open('useragent.txt', 'r') as ua:
-        lines = ua.readlines()
-        return random.choice(lines).strip()
 
 
 def scrape_jobs(query, page, location = ''):
