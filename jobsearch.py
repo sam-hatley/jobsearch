@@ -1,6 +1,8 @@
 import urllib
 import cloudscraper
 from bs4 import BeautifulSoup
+import numpy as np
+import pandas as pd
 
 
 def scrape_jobs(query, page, location = ''):
@@ -66,8 +68,5 @@ def extract_jobs(soup):
     
     return titles, companies, dates, links
 
-
-# page = test_page()
-# titles, companies, dates, links = extract_jobs(page)
-# for job in titles:
-#     print(job)
+def jobs_save(jobs_dict):
+    exit()

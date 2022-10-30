@@ -1,5 +1,7 @@
 from jobsearch import *
+import datetime
 import pandas as pd
+import numpy as np
 
 # Here: build a program that iterates through extract_jobs as required for the
 # number of jobs and job titles to fetch
@@ -15,15 +17,19 @@ import pandas as pd
 # applied to, etc, that would be best. Total automation is possible, but will take quite
 # a bit more work!
 
+# Create a dictionary to hold the job info
+jobs_dict = {
+    'Title' : [],
+    'Company' : [],
+    'Date Posted' : [],
+    'Date Retrieved' : [],
+    'Link' : []
+    }
 
-# start by collecting the queries saved in a text file
+# start by collecting the queries saved in a text file and specifing the time
 job_queries = open('jobs.txt').read().splitlines()
-
-# Create lists to append the data
-titles = []
-companies = []
-dates = []
-links = []
+now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+print(now)
 
 # For each query, grab a number of job results and append to lists
 for query in job_queries:
@@ -31,11 +37,16 @@ for query in job_queries:
     while index < 10:
         job_soup = test_page(query, index)
         ext_titles, ext_companies, ext_dates, ext_links = extract_jobs(job_soup)
-
-        titles.append(ext_titles)
-        companies.append(ext_companies)
-        dates.append(ext_dates)
-        links.append(ext_links)
+        
+        # Append each entry to the dictionary
+        n = 0
+        for i in ext_links:
+            jobs_dict['Title'].append(ext_titles[n])
+            jobs_dict['Company'].append(ext_companies[n])
+            jobs_dict['Date Posted'].append(ext_dates[n])
+            jobs_dict['Date Retrieved'].append(now)
+            jobs_dict['Link'].append(ext_links[n])
+            n += 1
         
         index += 15
 
@@ -45,3 +56,5 @@ for query in job_queries:
 
 # How are we going to work with this data?
 
+jobs_df = pd.DataFrame(jobs_dict)
+jobs_df.to_parquet('jobs.parquet')
