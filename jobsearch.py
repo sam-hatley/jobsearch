@@ -19,8 +19,8 @@ def scrape_jobs(query, page, location = ''):
     return soup
     
 
-def local_page():
-    '''Uses a saved local page for testing'''
+def test_page():
+    '''Returns a saved local page for testing'''
 
     # Open a previously scraped html file, convert to soup and return
     with open('jobpage.html') as jp:
@@ -29,8 +29,14 @@ def local_page():
 
 
 def extract_jobs(soup):
-    '''Takes a soup input and extracts the posting date, 
-    job title, company, description, and link'''
+    '''Takes a soup input and extracts job information. Returns
+    four lists: titles, companies, dates, links.'''
+
+    # We'll store the data in lists
+    titles = []
+    companies = []
+    dates = []
+    links = []
 
     # Indeed separates job listings in "JobCards". We'll start by pulling these out.
     jobcards = soup.find_all('div', class_='cardOutline')
@@ -52,12 +58,16 @@ def extract_jobs(soup):
         # Rebuilding the link with an ID fetched earlier
         link = 'https://uk.indeed.com/viewjob?jk=' + link_elem
 
-        # Return values
-        print(title)
-        print(company)
-        print(date)
-        print(link)
-        print("\n")
+        # Append the values to their lists
+        titles.append(title)
+        companies.append(company)
+        dates.append(date)
+        links.append(link)
+    
+    return titles, companies, dates, links
 
-page = scrape_jobs("product manager", 1)
-extract_jobs(page)
+
+page = test_page()
+titles, companies, dates, links = extract_jobs(page)
+for job in titles:
+    print(job)
