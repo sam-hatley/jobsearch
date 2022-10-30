@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 
 
 def scrape_jobs(query, page, location = ''):
-    '''Returns a page from indeed. Takes a job title query string and starting result number.'''
+    '''Returns a (souped) page from indeed. Takes a job title query string and starting result number.'''
 
     # Create the URL from the query
     url_vars = {'q' : query,'l' : location, 'sort' : 'date', 'start' : page}
@@ -19,7 +19,7 @@ def scrape_jobs(query, page, location = ''):
     return soup
     
 
-def test_page():
+def test_page(*args):
     '''Returns a saved local page for testing'''
 
     # Open a previously scraped html file, convert to soup and return
@@ -67,7 +67,7 @@ def extract_jobs(soup):
     return titles, companies, dates, links
 
 
-page = test_page()
-titles, companies, dates, links = extract_jobs(page)
-for job in titles:
-    print(job)
+# page = test_page()
+# titles, companies, dates, links = extract_jobs(page)
+# for job in titles:
+#     print(job)
