@@ -3,8 +3,6 @@ import cloudscraper
 from bs4 import BeautifulSoup
 import random
 
-from pendulum import date
-
 
 def select_agent():
     '''Randomly selects a useragent from a list of 28'''
@@ -17,7 +15,6 @@ def select_agent():
 
 def scrape_jobs(query, page, location = ''):
     '''Returns a page from indeed. Takes a job title query string and starting result number.'''
-    # Will need to do something regarding the location here: set to London for testing.
 
     # Create the URL from the query
     url_vars = {'q' : query,'l' : location, 'sort' : 'date', 'start' : page}
@@ -50,12 +47,6 @@ def extract_jobs(soup):
 
     # The next step is to iterate through each jobcard and pull the information we need.
     for job in jobcards:
-        # There's an odd bug with date: there's a span class="visually-hidden"
-        # within "date" that adds an additional "posted". Need to strip it somehow.
-
-        # We're getting the elements at this point, including a bunch of html data that
-        # we can strip off later. To get the link, we'll need to fetch one of indeed's
-        # identifiers to rebuild the link later.
         title_elem = job.find('h2', class_='jobTitle')
         company_elem = job.find('span', class_='companyName')
         date_elem = job.find('span', class_='date')
@@ -64,11 +55,14 @@ def extract_jobs(soup):
         # Cleaning the elements to get what we need
         title = title_elem.get_text()
         company = company_elem.get_text()
+        # Removing an extra 'Posted' in some date entries
         for span in date_elem.findAll('span', class_="visually-hidden"):
             span.replace_with('')
         date = date_elem.get_text()
+        # Rebuilding the link with an ID fetched earlier
         link = 'https://uk.indeed.com/viewjob?jk=' + link_elem
 
+        # Return values
         print(title)
         print(company)
         print(date)
