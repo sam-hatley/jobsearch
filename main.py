@@ -2,8 +2,6 @@ from jobscrape import job_search
 from jobanalysis import *
 import datetime
 
-date_now = datetime.datetime.now().strftime("%Y-%m-%d")
-
 while True:
     runtype = input('(S)crape new jobs or (L)oad old jobs? (S/L): ').lower()
 
@@ -29,5 +27,11 @@ while True:
     else:
         print('\nInvalid input, please type "s" or "l" to continue: ')
 
-df = jobs_sort(jobs_df, date_now)
+usr_in = input('Number of days ago to display search results? ')
+date_range = datetime.datetime.now() - datetime.timedelta(int(usr_in))
+
+df = jobs_sort(jobs_df, date_range)
 jobs_save(df, keep="first")
+
+print("Selected jobs saved to selects.csv.")
+print(df)

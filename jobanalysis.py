@@ -38,34 +38,47 @@ def jobs_sort(df, date):
     flags selects, returns a dataframe of selected jobs. Date should be in the 
     format "YYYY-MM-DD".'''
 
-    df = df[(df['Date Posted'] == date)]
+    df['Date Posted'] = pd.to_datetime(df['Date Posted'])
+    df = df[(df['Date Posted'] >= date)]
+    df = df.fillna('')
+    df = df[(df['Select'] == '')]
 
     # Filter out some words
     filters = [
         'senior',
+        'lead',
+        'executive',
+        'director',
+        'principal',
         'data entry',
         'c\+\+',
         'trading',
         'receptionist',
         'Executive Assistant',
+        'Procurement',
+        'Sales'
     ]
+
     filter = '|'.join(filters)
     df = df[~df['Title'].str.contains(filter, case=False)]
 
-
-    # Date posted: want to convert to a date. Maybe it's better to do this in input?
+    for i in range(0, len(df)):
+        print(f'\nResult {i+1} of {len(df)+1}:')
+        print(df.iloc[i,0:3])
+        usr_input = input('Type an integer rating if interested. Enter or 0 to reject. (Q) to quit: ')
+        if not usr_input.isdigit():
+            if usr_input.lower() == 'q':
+                break
+            rating = 0
+        else:
+            rating = int(usr_input)
+        
+        df.iloc[i, df.columns.get_loc('Select')] = rating
     
+    df['Select'] = pd.to_numeric(df['Select'])
+    df = df.sort_values(by='Select', ascending=False)
+    df_selects = df[(df['Select'] > 0)]
 
-    return df
+    df_selects.to_csv('selects.csv')
 
-df = jobs_load()
-df = jobs_sort(df, "2022-10-31")
-
-pd.set_option('display.max_rows', 100)
-print(df)
-
-
-# Either a number in the format "Posted {n} day(s) ago", from today with "Just posted" or "Today", or "Hiring ongoing"
-# Possibly something else entirely, but we haven't seen it yet.
-
-# Want to convert this value into an actual date.
+    return df_selects
