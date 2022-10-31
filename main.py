@@ -12,7 +12,7 @@ while True:
         queries = open('jobs.txt').read().splitlines()
 
         # Search for the queries
-        dict = job_search(queries, test = 1)
+        dict = job_search(queries, test = 0)
         jobs_df = jobs_save(dict)
 
         cont = input("\nPress enter to continue to job sorting: ")

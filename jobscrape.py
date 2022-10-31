@@ -64,9 +64,9 @@ def extract_jobs(soup):
         for span in date_elem.findAll('span', class_="visually-hidden"):
             span.replace_with('')
         
-
         # Converting the posted date into a usable format now
         date_extr = date_elem.get_text().lower()
+        print(date_extr)
 
         # Anything 'just posted' or 'today' will get timestamped for today
         if date_extr == 'just posted' or date_extr == 'today':
@@ -84,8 +84,13 @@ def extract_jobs(soup):
         else:
             date_list = date_extr.split()
             if date_list[0] == 'posted':
-                date = date_now - datetime.timedelta(int(date_list[1]))
-                date = date.strftime("%Y-%m-%d")
+                # This will generally fail if the posting was "30+" days ago.
+                if not date_list[1].isdigit():
+                    date = date_now - datetime.timedelta(30)
+                    date = date.strftime("%Y-%m-%d")
+                else:
+                    date = date_now - datetime.timedelta(int(date_list[1]))
+                    date = date.strftime("%Y-%m-%d")
             else:
                 date = ''
 

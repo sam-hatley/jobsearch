@@ -1,3 +1,5 @@
 Product+Owner
 Product+Manager
 Data
+Junior+Product
+Analyst

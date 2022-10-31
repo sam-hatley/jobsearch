@@ -38,8 +38,20 @@ def jobs_sort(df, date):
     flags selects, returns a dataframe of selected jobs. Date should be in the 
     format "YYYY-MM-DD".'''
 
-    df = df[(df['Date Retrieved'] == date)]
-    
+    df = df[(df['Date Posted'] == date)]
+
+    # Filter out some words
+    filters = [
+        'senior',
+        'data entry',
+        'c\+\+',
+        'trading',
+        'receptionist',
+        'Executive Assistant',
+    ]
+    filter = '|'.join(filters)
+    df = df[~df['Title'].str.contains(filter, case=False)]
+
 
     # Date posted: want to convert to a date. Maybe it's better to do this in input?
     
@@ -47,7 +59,11 @@ def jobs_sort(df, date):
     return df
 
 df = jobs_load()
+df = jobs_sort(df, "2022-10-31")
+
+pd.set_option('display.max_rows', 100)
 print(df)
+
 
 # Either a number in the format "Posted {n} day(s) ago", from today with "Just posted" or "Today", or "Hiring ongoing"
 # Possibly something else entirely, but we haven't seen it yet.
