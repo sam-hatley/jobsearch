@@ -52,7 +52,7 @@ This is made up of three files:
 | - | - |
 | [main.py](main.py) | The file used to run the program. It calls functions within the other two files to allow a text-based user interface for fetching and sorting jobs. |
 | [jobscrape.py](jobscrape.py) | Stores functions related to scraping Indeed |
-| [jobanalysis.py](jobanalysis.py) | Stores functions related to handling the output of jobanalysis.py |
+| [jobanalysis.py](jobanalysis.py) | Stores functions related to handling the output of jobscrape.py |
 
 ### Running the Program
 
