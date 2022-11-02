@@ -32,6 +32,18 @@ Bodyguard
 secret agent
 ```
 
+You will also want to edit the filters in [jobanalysis.py](jobanalysis.py)'s ```job_sort()``` function. These filters will remove jobs from consideration if they contain a word in the list. I have a few set for myself, but you should tailor this to your requirements. It should look something like the below, separated by ```,``` and with each word either in ```"double"``` or ```'single'``` quotes:
+
+```python
+    # Filter out some words
+    filters = [
+        'bald',
+        'blue',
+        'director',
+        'executive'
+    ]
+```
+
 ### Files
 
 This is made up of three files:
