@@ -44,12 +44,16 @@ This is made up of three files:
 
 ### Running the Program
 
+I would highly recommend running this behind a VPN: although I've done as much as I can to slow down the scraping process, Indeed isn't fond of scraping software and may block your IP if you use this frequently.
+
 1. After installing any [dependencies](#requirements), run [main.py](main.py).
 2. It will ask you if you want to scrape or load. If it's your first time running the program, choose scrape (s).
 3. Choose a number of days to scrape jobs: if you select 1, it will search for jobs posted between yesterday and today. Type any number above 0.
 4. The program will go through your list of jobs, and search each one until it hits the number of days you've specified. Don't worry if you get an error in the process: I haven't explicitly built in a way of handling "no results" pages, but the program will continue to work even if it hits one.
 5. Go ahead and take a look at the results. Plug in a number to "rate" the job. If you're finished before going through the results, type "q".
 6. You'll see a list with the job titles and links in the program: you can take a look through them here, or just go to the generated file ```selects.csv``` to look through them later. All jobs and ratings are stored in ```joblist.csv```, so you can come back and take a look through that later, if you want.
+
+Roughly, this is what the program looks like:
 
 ```
 (S)crape new jobs or (L)oad old jobs? (S/L): s
