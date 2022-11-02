@@ -5,3 +5,4 @@ test.py
 *.pyc
 *.csv
 *.pkl
+*.html

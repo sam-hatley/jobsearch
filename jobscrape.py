@@ -2,7 +2,7 @@ import urllib
 import cloudscraper
 from bs4 import BeautifulSoup
 import datetime
-from time import sleep
+from time import sleep, strptime
 from random import randint
 
 
@@ -66,7 +66,6 @@ def extract_jobs(soup):
         
         # Converting the posted date into a usable format now
         date_extr = date_elem.get_text().lower()
-        print(date_extr)
 
         # Anything 'just posted' or 'today' will get timestamped for today
         if date_extr == 'just posted' or date_extr == 'today':
@@ -153,6 +152,83 @@ def job_search(job_queries: list, results = 45, test = 0):
                 n += 1
             index += n
             sleep(0.5)
+
+        # Wait between queries, unless it's the last query
+        if query != job_queries[-1]:
+            rand = randint(1,5)
+            print(f'Waiting {rand} seconds')
+            sleep(rand)
+    
+    return jobs_dict
+
+
+def job_search_time(job_queries: list, days = 1, test: bool = 0):
+    '''Takes a list of job queries and a number of days to search back.
+    Returns a dictionary of results with the keys "Title", "Company", "Date
+    Posted", "Date Retrieved", "Link", and "Select" (empty). Waits a 1-5 
+    seconds between individual queries and half a second within.'''
+
+    now = datetime.datetime.now()
+    date_now = datetime.datetime.now().strftime("%Y-%m-%d")
+    time_now = datetime.datetime.now().strftime("%H:%M:%S")
+    
+
+    # Create a dictionary to hold the job info
+    jobs_dict = {
+        'Title' : [],
+        'Company' : [],
+        'Date Posted' : [],
+        'Date Retrieved' : [],
+        'Time Retrieved' : [],
+        'Link' : [],
+        'Select' : []
+        }
+
+    # For each query, grab a number of job results and append to lists
+    for query in job_queries:
+        index = 1
+        while index:
+            print(f"Retrieving results {index}-{index+14} for {query}")
+            # use test_page() for testing, scrape_joblist() for production
+            if test == 1:
+                job_soup = test_page()
+            else:
+                job_soup = scrape_joblist(query, index)
+            
+            ext_titles, ext_companies, ext_dates, ext_links = extract_jobs(job_soup)
+
+            # If timedelta ext_dates - days is less than or equal to days, increment index by 15
+            try:
+                last_date_list = strptime(ext_dates[-1], '%Y-%m-%d')
+            except:
+                print("An error has occured.")
+                with open("errorlog.html", "w") as f:
+                    job_err = str(job_soup)
+                    f.write(job_err)
+                print("HTML output saved to errorlog.html")
+                break
+            last_date_list = datetime.datetime(*last_date_list[:6])
+            last_date = now - datetime.timedelta(days)
+
+            # Append each entry to the dictionary
+            n = 0
+            print(f'Last posting: {ext_dates[-1]}')
+            for i in ext_links:
+                jobs_dict['Title'].append(ext_titles[n])
+                jobs_dict['Company'].append(ext_companies[n])
+                jobs_dict['Date Posted'].append(ext_dates[n])
+                jobs_dict['Date Retrieved'].append(date_now)
+                jobs_dict['Time Retrieved'].append(time_now)
+                jobs_dict['Link'].append(ext_links[n])
+                jobs_dict['Select'].append('')
+                n += 1
+
+            index += n
+            sleep(randint(50,150)/100)
+            if last_date_list >= last_date:
+                continue
+            else:
+                break
 
         # Wait between queries, unless it's the last query
         if query != job_queries[-1]:

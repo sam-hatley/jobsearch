@@ -29,10 +29,6 @@ def jobs_load():
     return df
 
 
-def job_info(arg):
-    '''Takes a link and extracts (info) from a job posting'''
-
-
 def jobs_sort(df, date):
     '''Iterates through jobs in a dataframe from a specified date. User input 
     flags selects, returns a dataframe of selected jobs. Date should be in the 
@@ -64,7 +60,7 @@ def jobs_sort(df, date):
 
     for i in range(0, len(df)):
         print(f'\nResult {i+1} of {len(df)+1}:')
-        print(df.iloc[i,0:3])
+        print(df.iloc[i,0:4])
         usr_input = input('Type an integer rating if interested. Enter or 0 to reject. (Q) to quit: ')
         if not usr_input.isdigit():
             if usr_input.lower() == 'q':

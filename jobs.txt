@@ -1,5 +1,7 @@
-Product+Owner
-Product+Manager
-Data
-Junior+Product
-Analyst
+Product Owner
+Product Manager
+Junior Product
+Business Analyst
+Data Analyst
+Data Product Manager
+Analytics
