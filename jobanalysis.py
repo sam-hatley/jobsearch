@@ -40,20 +40,10 @@ def jobs_sort(df, date):
     df = df[(df['Select'] == '')]
 
     # Filter out some words
-    filters = [
-        'senior',
-        'lead',
-        'executive',
-        'director',
-        'principal',
-        'data entry',
-        'c\+\+',
-        'trading',
-        'receptionist',
-        'Executive Assistant',
-        'Procurement',
-        'Sales'
-    ]
+    with open('./filters.txt') as f:
+        filters = f.readlines()
+    
+    filters = [line.strip() for line in filters]
 
     filter = '|'.join(filters)
     df = df[~df['Title'].str.contains(filter, case=False)]

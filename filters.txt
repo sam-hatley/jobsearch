@@ -1,0 +1,60 @@
+Account Manager
+Accountant
+Asset
+Business Development
+CNC
+Carbon
+Catering
+Chef
+Cleaner
+Communications
+Credit
+Data entry
+Director
+Driver
+Electrical
+Executive
+Executive Assistant
+FP&A
+Fellow
+Finance
+GP
+HGV
+Helpdesk
+Hotel
+IT Support
+Lead
+Loan
+Manufacturing
+Marketing
+Monitoring
+Operative
+Operator
+OraclePA
+PR
+Principal
+Procurement
+Project Manager
+Purchasing
+Quality
+R&D
+Receptionist
+Research
+Retail
+SAS
+Sales
+Senior
+Service
+Service
+Service Desk
+Store Manager
+Success
+Supply Chain
+Support
+Tax
+Teaching
+Technician
+Therapist
+Trading
+Underwriter
+Waiter
