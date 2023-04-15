@@ -1,8 +1,10 @@
 Account Manager
 Accountant
 Asset
+Bar
 Business Development
 CNC
+Cabling
 Carbon
 Catering
 Chef
@@ -60,6 +62,7 @@ Therapist
 Therapy
 Trading
 Underwriter
+Underwriting
 Waiter
 CRM
 Implementation
@@ -91,3 +94,7 @@ Cleaning
 Kitchen
 Branch
 Restaurant
+Traffic
+Construction
+Content
+Copy
