@@ -1,30 +1,53 @@
 Account Manager
 Accountant
+Administrator
 Asset
+Assistant Manager
 Bar
+Barista
+Branch
+Breakfast
 Business Development
 CNC
+CRM
 Cabling
 Carbon
 Catering
 Chef
+Claims
 Cleaner
+Cleaning
+Client
+Colleague
 Communications
+Construction
+Content
+CopyCopywriter
 Credit
 Data entry
 Director
+Drink
 Driver
 Electrical
+Events
 Executive
 Executive Assistant
 FP&A
 Fellow
 Finance
+Food
+Fulfilment
 GP
 HGV
+HR
 Helpdesk
+Hospitality
 Hotel
 IT Support
+Implementation
+Insurance
+Kitchen
+Laboratory
 Lead
 Loan
 Manufacturing
@@ -35,6 +58,9 @@ Operator
 Oracle
 PA
 PR
+Partner
+Payment
+Payroll
 Principal
 Procurement
 Project Manager
@@ -43,7 +69,9 @@ QA
 Quality
 R&D
 Receptionist
+Relationship
 Research
+Restaurant
 Retail
 SAS
 Sales
@@ -51,8 +79,12 @@ Senior
 Service
 Service
 Service Desk
+Shop
+Social
 Store Manager
+Student
 Success
+Supervisor
 Supply Chain
 Support
 Tax
@@ -61,40 +93,7 @@ Technician
 Therapist
 Therapy
 Trading
+Traffic
 Underwriter
 Underwriting
 Waiter
-CRM
-Implementation
-Payroll
-Client
-HR
-Fulfilment
-Social
-Payment
-Events
-Hospitality
-Supervisor
-Assistant Manager
-Administrator
-Barista
-Partner
-Insurance
-Relationship
-Copywriter
-Breakfast
-Food
-Drink
-Shop
-Student
-Laboratory
-Claims
-Colleague
-Cleaning
-Kitchen
-Branch
-Restaurant
-Traffic
-Construction
-Content
-Copy
