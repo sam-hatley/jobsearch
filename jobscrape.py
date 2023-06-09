@@ -4,7 +4,11 @@ from bs4 import BeautifulSoup
 import datetime
 from time import sleep, strptime
 from random import randint
+from dotenv import load_dotenv, find_dotenv
+import os
 
+load_dotenv(find_dotenv())
+CAPMONSTER_API_KEY = os.getenv("CAPMONSTER_API_KEY")
 
 def scrape_joblist(query, page, location = ''):
     '''Returns a (souped) page from indeed. Takes a job query string and 
@@ -14,9 +18,32 @@ def scrape_joblist(query, page, location = ''):
     url_vars = {'q' : query,'l' : location, 'sort' : 'date', 'start' : page}
     url = ('https://uk.indeed.com/jobs?' + urllib.parse.urlencode(url_vars))
     
-    # Get the page from the URL with cloudscraper to bypass cloudflare security
-    scraper = cloudscraper.create_scraper()
-    page = scraper.get(url)
+    # Get the page from the URL with cloudscraper to bypass cloudflare security  
+    try:
+        scraper = cloudscraper.create_scraper(
+            browser={
+                'browser': 'firefox',
+                'platform': 'windows',
+                'mobile': False
+            }
+        )
+        
+        page = scraper.get(url)
+
+    except cloudscraper.exceptions.CloudflareChallengeError:
+        scraper = cloudscraper.create_scraper(
+            browser={
+                'browser': 'firefox',
+                'platform': 'windows',
+                'mobile': False
+            },
+            captcha={
+                'provider': 'capmonster',
+                'api_key': CAPMONSTER_API_KEY
+            }
+        )
+        
+        page = scraper.get(url)
     
     # Convert the page to soup and return soup
     soup = BeautifulSoup(page.content, "html.parser")
@@ -167,7 +194,6 @@ def job_search_time(job_queries: list, days = 1, test: bool = 0):
     seconds between individual queries and half a second within.'''
 
     now = datetime.datetime.now()
-    
 
     # Create a dictionary to hold the job info
     jobs_dict = {
@@ -236,3 +262,7 @@ def job_search_time(job_queries: list, days = 1, test: bool = 0):
             sleep(rand)
     
     return jobs_dict
+
+if __name__ == "__main__":
+    soup = scrape_joblist('Data Engineer', 1)
+    print(soup)
