@@ -112,17 +112,14 @@ def job_search(job_queries: list, results = 45, test = 0):
     Posted", "Date Retrieved", "Link", and "Select" (empty). Waits a 1-5 
     seconds between individual queries and half a second within.'''
 
-    date_now = datetime.datetime.now().strftime("%Y-%m-%d")
-    time_now = datetime.datetime.now().strftime("%H:%M:%S")
-
     # Create a dictionary to hold the job info
     jobs_dict = {
         'Title' : [],
         'Company' : [],
         'Date Posted' : [],
-        'Date Retrieved' : [],
-        'Time Retrieved' : [],
+        'Datetime Retrieved' : [],
         'Link' : [],
+        'Query' : [],
         'Select' : []
         }
 
@@ -138,6 +135,7 @@ def job_search(job_queries: list, results = 45, test = 0):
                 job_soup = scrape_joblist(query, index)
             
             ext_titles, ext_companies, ext_dates, ext_links = extract_jobs(job_soup)
+            datetime_now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             
             # Append each entry to the dictionary
             n = 0
@@ -145,9 +143,9 @@ def job_search(job_queries: list, results = 45, test = 0):
                 jobs_dict['Title'].append(ext_titles[n])
                 jobs_dict['Company'].append(ext_companies[n])
                 jobs_dict['Date Posted'].append(ext_dates[n])
-                jobs_dict['Date Retrieved'].append(date_now)
-                jobs_dict['Time Retrieved'].append(time_now)
+                jobs_dict['Datetime Retrieved'].append(datetime_now)
                 jobs_dict['Link'].append(ext_links[n])
+                jobs_dict['Query'].append(query)
                 jobs_dict['Select'].append('')
                 n += 1
             index += n
@@ -169,8 +167,6 @@ def job_search_time(job_queries: list, days = 1, test: bool = 0):
     seconds between individual queries and half a second within.'''
 
     now = datetime.datetime.now()
-    date_now = datetime.datetime.now().strftime("%Y-%m-%d")
-    time_now = datetime.datetime.now().strftime("%H:%M:%S")
     
 
     # Create a dictionary to hold the job info
@@ -178,9 +174,10 @@ def job_search_time(job_queries: list, days = 1, test: bool = 0):
         'Title' : [],
         'Company' : [],
         'Date Posted' : [],
-        'Date Retrieved' : [],
+        'Datetime Retrieved' : [],
         'Time Retrieved' : [],
         'Link' : [],
+        'Query' : [],
         'Select' : []
         }
 
@@ -209,6 +206,8 @@ def job_search_time(job_queries: list, days = 1, test: bool = 0):
                 break
             last_date_list = datetime.datetime(*last_date_list[:6])
             last_date = now - datetime.timedelta(days)
+            
+            datetime_now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
             # Append each entry to the dictionary
             n = 0
@@ -217,9 +216,9 @@ def job_search_time(job_queries: list, days = 1, test: bool = 0):
                 jobs_dict['Title'].append(ext_titles[n])
                 jobs_dict['Company'].append(ext_companies[n])
                 jobs_dict['Date Posted'].append(ext_dates[n])
-                jobs_dict['Date Retrieved'].append(date_now)
-                jobs_dict['Time Retrieved'].append(time_now)
+                jobs_dict['Date Retrieved'].append(datetime_now)
                 jobs_dict['Link'].append(ext_links[n])
+                jobs_dict['Query'].append(query)
                 jobs_dict['Select'].append('')
                 n += 1
 

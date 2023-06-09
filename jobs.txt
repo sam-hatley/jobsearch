@@ -1,3 +1,5 @@
 Data Engineer
-Analyst
+Data Analyst
 Product Manager
+Digital Transformation
+Implementation Manager
