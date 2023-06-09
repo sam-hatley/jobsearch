@@ -1,5 +1,6 @@
 import os.path
 import pandas as pd
+from fuzzywuzzy import fuzz
 
 
 def jobs_save(dict, keep="last"):
@@ -40,17 +41,34 @@ def jobs_sort(df, date):
     df = df[(df['Select'] == '')]
 
     # Filter out some words
-    with open('./filters.txt') as f:
-        filters = f.readlines()
+    if os.path.isfile('filters.txt'):
+        with open('./filters.txt') as f:
+            filters = f.readlines()
+        
+        filters = [line.strip() for line in filters]
+
+        filter = '|'.join(filters)
+        df = df[~df['Title'].str.contains(filter, case=False)]
+        
+    # Ensure the query is within the title, using fuzzy matching
+    df = df[df.apply(lambda row: fuzz.partial_ratio(row['Query'], row['Title'])\
+        > 80 if pd.notnull(row['Title']) and pd.notnull(row['Query']) else False, axis=1)]
     
-    filters = [line.strip() for line in filters]
+    if len(df) == 0:
+        print("No jobs matching description.")
+        return
+        
 
-    filter = '|'.join(filters)
-    df = df[~df['Title'].str.contains(filter, case=False)]
-
-    for i in range(0, len(df)):
-        print(f'\nResult {i+1} of {len(df)+1}:')
-        print(df.iloc[i,0:4])
+    for i in range(0, len(df)):        
+        print_frame = df.iloc[i]
+        print_snippet = print_frame['Snippet']
+        
+        print(f'\n\nResult {i+1} of {len(df)+1}: {print_frame["Query"]}')
+        
+        print_frame = print_frame.drop(['Link', 'Datetime Retrieved', 'Query', 'Select', 'Snippet'])
+        
+        print(print_frame)
+        print(print_snippet)
         usr_input = input('Type an integer rating if interested. Enter or 0 to reject. (Q) to quit: ')
         if not usr_input.isdigit():
             if usr_input.lower() == 'q':
@@ -68,3 +86,10 @@ def jobs_sort(df, date):
     df_selects.to_csv('selects.csv')
 
     return df_selects
+
+if __name__ == "__main__":
+    from datetime import datetime
+    
+    df = jobs_load()
+    selects = jobs_sort(df, datetime.now().strftime("%Y-%m-%d"))
+    jobs_save(selects, keep="first")

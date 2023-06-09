@@ -1,16 +1,12 @@
 import urllib
-import cloudscraper
+import selenium
+import undetected_chromedriver as uc
 from bs4 import BeautifulSoup
 import datetime
 from time import sleep, strptime
 from random import randint
-from dotenv import load_dotenv, find_dotenv
-import os
 
-load_dotenv(find_dotenv())
-CAPMONSTER_API_KEY = os.getenv("CAPMONSTER_API_KEY")
-
-def scrape_joblist(query, page, location = ''):
+def scrape_joblist(driver, query, page, location = ''):
     '''Returns a (souped) page from indeed. Takes a job query string and 
     starting number.'''
 
@@ -18,35 +14,18 @@ def scrape_joblist(query, page, location = ''):
     url_vars = {'q' : query,'l' : location, 'sort' : 'date', 'start' : page}
     url = ('https://uk.indeed.com/jobs?' + urllib.parse.urlencode(url_vars))
     
-    # Get the page from the URL with cloudscraper to bypass cloudflare security  
-    try:
-        scraper = cloudscraper.create_scraper(
-            browser={
-                'browser': 'firefox',
-                'platform': 'windows',
-                'mobile': False
-            }
-        )
-        
-        page = scraper.get(url)
+    # Get the page from the URL with cloudscraper to bypass cloudflare security
+    # Moving this to the aggregate function  
+    # options = uc.ChromeOptions()
+    # options.add_argument('--headless')
 
-    except cloudscraper.exceptions.CloudflareChallengeError:
-        scraper = cloudscraper.create_scraper(
-            browser={
-                'browser': 'firefox',
-                'platform': 'windows',
-                'mobile': False
-            },
-            captcha={
-                'provider': 'capmonster',
-                'api_key': CAPMONSTER_API_KEY
-            }
-        )
+    # driver = uc.Chrome(version_main=114, options=options)
         
-        page = scraper.get(url)
+    driver.get(url)
+    page = driver.page_source
     
     # Convert the page to soup and return soup
-    soup = BeautifulSoup(page.content, "html.parser")
+    soup = BeautifulSoup(page, "html.parser")
     return soup
     
 
@@ -68,7 +47,10 @@ def extract_jobs(soup):
     # We'll store the data in lists
     titles = []
     companies = []
+    locations = []
+    salaries = []
     dates = []
+    snippets = []
     links = []
 
     # Indeed separates job listings in "JobCards". We'll start by pulling these
@@ -80,16 +62,30 @@ def extract_jobs(soup):
     for jobcard in jobcards:
         title_elem = jobcard.find('h2', class_='jobTitle')
         company_elem = jobcard.find('span', class_='companyName')
+        location_elem = jobcard.find('div', class_='companyLocation')
+        salary_elem = jobcard.find('div', class_='salary-snippet-container')
         date_elem = jobcard.find('span', class_='date')
         link_elem = jobcard.find('a').get("data-jk")
+        snippet_elem = jobcard.find('div', class_='job-snippet')
+
 
         # Cleaning the elements to get what we need
         title = title_elem.get_text()
         company = company_elem.get_text()
+        location = location_elem.get_text()
+        if salary_elem:
+            salary = salary_elem.get_text()
+        else:
+            salary = "nan"
+        snippet = snippet_elem.get_text()
+        
 
         # Removing an extra 'Posted' in some date entries
-        for span in date_elem.findAll('span', class_="visually-hidden"):
-            span.replace_with('')
+        try:
+            for span in date_elem.findAll('span', class_="visually-hidden"):
+                span.replace_with('')
+        except:
+            continue
         
         # Converting the posted date into a usable format now
         date_extr = date_elem.get_text().lower()
@@ -118,7 +114,7 @@ def extract_jobs(soup):
                     date = date_now - datetime.timedelta(int(date_list[1]))
                     date = date.strftime("%Y-%m-%d")
             else:
-                date = ''
+                date = date_now - datetime.timedelta(30)
 
 
         # Rebuilding the link with an ID fetched earlier
@@ -127,67 +123,16 @@ def extract_jobs(soup):
         # Append the values to their lists
         titles.append(title)
         companies.append(company)
+        locations.append(location)
+        salaries.append(salary)
         dates.append(date)
         links.append(link)
+        snippets.append(snippet)
     
-    return titles, companies, dates, links
+    return titles, companies, locations, salaries, dates, links, snippets
 
 
-def job_search(job_queries: list, results = 45, test = 0):
-    '''Takes a list of job queries and a number of desired results for each.
-    Returns a dictionary of results with the keys "Title", "Company", "Date
-    Posted", "Date Retrieved", "Link", and "Select" (empty). Waits a 1-5 
-    seconds between individual queries and half a second within.'''
-
-    # Create a dictionary to hold the job info
-    jobs_dict = {
-        'Title' : [],
-        'Company' : [],
-        'Date Posted' : [],
-        'Datetime Retrieved' : [],
-        'Link' : [],
-        'Query' : [],
-        'Select' : []
-        }
-
-    # For each query, grab a number of job results and append to lists
-    for query in job_queries:
-        index = 1
-        while index < results:
-            print(f"Retrieving results {index}-{index+14} for {query}")
-            # use test_page() for testing, scrape_joblist() for production
-            if test == 1:
-                job_soup = test_page()
-            else:
-                job_soup = scrape_joblist(query, index)
-            
-            ext_titles, ext_companies, ext_dates, ext_links = extract_jobs(job_soup)
-            datetime_now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            
-            # Append each entry to the dictionary
-            n = 0
-            for i in ext_links:
-                jobs_dict['Title'].append(ext_titles[n])
-                jobs_dict['Company'].append(ext_companies[n])
-                jobs_dict['Date Posted'].append(ext_dates[n])
-                jobs_dict['Datetime Retrieved'].append(datetime_now)
-                jobs_dict['Link'].append(ext_links[n])
-                jobs_dict['Query'].append(query)
-                jobs_dict['Select'].append('')
-                n += 1
-            index += n
-            sleep(0.5)
-
-        # Wait between queries, unless it's the last query
-        if query != job_queries[-1]:
-            rand = randint(1,5)
-            print(f'Waiting {rand} seconds')
-            sleep(rand)
-    
-    return jobs_dict
-
-
-def job_search_time(job_queries: list, days = 1, test: bool = 0):
+def job_search_time(job_queries: list, days = 1, testing: bool = 0):
     '''Takes a list of job queries and a number of days to search back.
     Returns a dictionary of results with the keys "Title", "Company", "Date
     Posted", "Date Retrieved", "Link", and "Select" (empty). Waits a 1-5 
@@ -199,39 +144,62 @@ def job_search_time(job_queries: list, days = 1, test: bool = 0):
     jobs_dict = {
         'Title' : [],
         'Company' : [],
+        'Location': [],
+        'Salary': [],
         'Date Posted' : [],
         'Datetime Retrieved' : [],
-        'Time Retrieved' : [],
         'Link' : [],
+        'Snippet' : [],
         'Query' : [],
         'Select' : []
         }
-
+    
     # For each query, grab a number of job results and append to lists
+    count = 0
+    
     for query in job_queries:
-        index = 1
-        while index:
-            print(f"Retrieving results {index}-{index+14} for {query}")
-            # use test_page() for testing, scrape_joblist() for production
-            if test == 1:
-                job_soup = test_page()
-            else:
-                job_soup = scrape_joblist(query, index)
-            
-            ext_titles, ext_companies, ext_dates, ext_links = extract_jobs(job_soup)
+        index = 0
+        while index >= 0:
+            if count % 30 == 0:
+                if count != 0:
+                    driver.quit
+                options = uc.ChromeOptions()
+                options.add_argument('--headless')
 
-            # If timedelta ext_dates - days is less than or equal to days, increment index by 15
-            try:
-                last_date_list = strptime(ext_dates[-1], '%Y-%m-%d')
-            except:
-                print("An error has occured.")
-                with open("errorlog.html", "w") as f:
-                    job_err = str(job_soup)
-                    f.write(job_err)
-                print("HTML output saved to errorlog.html")
-                break
+                driver = uc.Chrome(version_main=114, options=options)
+            
+            print(f"Retrieving results page {index + 1} for {query}")
+            # use test_page() for testing, scrape_joblist() for production
+
+            retry = 0
+            while True:
+                job_soup = scrape_joblist(driver, query, index * 10)
+                
+                ext_titles, ext_companies, ext_locations, ext_salaries, \
+                    ext_dates, ext_links, ext_snippets = extract_jobs(job_soup)            
+                try:
+                    # If timedelta ext_dates - days is less than or equal to days, increment index by 15
+                    last_date_list = strptime(ext_dates[-1], '%Y-%m-%d')
+                    break
+                except BaseException as e:
+                    if retry >= 3:
+                        print(f"An error has occured. Results page {index + 1} for {query} has been skipped.")
+                        with open("errorlog.html", "w") as f:
+                            job_err = str(job_soup)
+                            f.write(job_err)
+                        print("HTML output saved to errorlog.html")
+                    else:
+                        retry += 1
+                        print("An error has occured. Attempting to retry")
+                        sleep(5)
+                        continue
+                index += 1
+                count += 1
+                continue
+
             last_date_list = datetime.datetime(*last_date_list[:6])
             last_date = now - datetime.timedelta(days)
+                
             
             datetime_now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -241,16 +209,20 @@ def job_search_time(job_queries: list, days = 1, test: bool = 0):
             for i in ext_links:
                 jobs_dict['Title'].append(ext_titles[n])
                 jobs_dict['Company'].append(ext_companies[n])
+                jobs_dict['Location'].append(ext_locations[n])
+                jobs_dict['Salary'].append(ext_salaries[n])
                 jobs_dict['Date Posted'].append(ext_dates[n])
-                jobs_dict['Date Retrieved'].append(datetime_now)
+                jobs_dict['Datetime Retrieved'].append(datetime_now)
                 jobs_dict['Link'].append(ext_links[n])
+                jobs_dict['Snippet'].append(ext_snippets[n])
                 jobs_dict['Query'].append(query)
                 jobs_dict['Select'].append('')
                 n += 1
 
-            index += n
+            index += 1
+            count += 1
             sleep(randint(50,150)/100)
-            if last_date_list >= last_date:
+            if last_date_list >= last_date and testing == 0:
                 continue
             else:
                 break
@@ -264,5 +236,7 @@ def job_search_time(job_queries: list, days = 1, test: bool = 0):
     return jobs_dict
 
 if __name__ == "__main__":
-    soup = scrape_joblist('Data Engineer', 1)
-    print(soup)
+    jobs_dict = job_search_time(job_queries= ['Data Engineer'], testing= 1)
+    
+    from jobanalysis import jobs_save
+    jobs_save(jobs_dict)
