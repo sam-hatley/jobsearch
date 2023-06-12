@@ -18,9 +18,11 @@ The program is built in Python 3.9, and relies on the following external package
 | Package | Usage |
 | - | - |
 | Urllib | Dynamically builds URLs |
-| Cloudscraper | Scrapes Indeed's website while bypassing CloudFlare's anti-bot protection |
+| Selenium | Scrapes Indeed's website while bypassing CloudFlare's anti-bot protection |
 | bs4 | BeautifulSoup: parses html files and retrieves text |
 | pandas | Manages and filters lists of selected jobs |
+| fuzzywuzzy | Applies fuzzy matching to job titles |
+| pyperclip | Copies job links to clipboard after sorting |
 
 You'll also need to have a ```jobs.txt``` file in the same folder as main.py: it's a text file with a list of search queries, separated by line. If your query is more than one word, separate it with spaces or a "+". Case doesn't matter. It should look something like the below:
 
@@ -32,17 +34,16 @@ Bodyguard
 secret agent
 ```
 
-You will also want to edit the filters in [jobanalysis.py](jobanalysis.py)'s ```job_sort()``` function. These filters will remove jobs from consideration if they contain a word in the list. I have a few set for myself, but you should tailor this to your requirements. It should look something like the below, separated by ```,``` and with each word either in ```"double"``` or ```'single'``` quotes:
+You may also want to edit the filters in a file called filters.txt, also in the same folder as main.py. These filters will remove jobs from consideration if they contain a word in the list. I have a few set for myself, but you should tailor this to your requirements. It should look something like the below, separated by ```,``` and with each word either in ```"double"``` or ```'single'``` quotes:
 
 ```python
-    # Filter out some words
-    filters = [
-        'bald',
-        'blue',
-        'director',
-        'executive'
-    ]
+assistant
+bartender
+director
+executive
 ```
+
+The program automatically filters jobs based on fuzzy matching between the job title and query you set up in ```jobs.txt```, which should remove the vast majority of irrevalant results. You can fine-tune this filter in line 58 of [jobanalysis.py](https://github.com/sam-hatley/jobsearch/blob/master/jobanalysis.py#L58), which is currently set to 75(%) using fuzzywuzzy's `token set ratio`.
 
 ### Files
 
@@ -63,12 +64,12 @@ I would highly recommend running this behind a VPN: although I've done as much a
 3. Choose a number of days to scrape jobs: if you select 1, it will search for jobs posted between yesterday and today. Type any number above 0.
 4. The program will go through your list of jobs, and search each one until it hits the number of days you've specified. Don't worry if you get an error in the process: I haven't explicitly built in a way of handling "no results" pages, but the program will continue to work even if it hits one.
 5. Go ahead and take a look at the results. Plug in a number to "rate" the job. If you're finished before going through the results, type "q".
-6. You'll see a list with the job titles and links in the program: you can take a look through them here, or just go to the generated file ```selects.csv``` to look through them later. All jobs and ratings are stored in ```joblist.csv```, so you can come back and take a look through that later, if you want.
+6. You'll see a list with the job titles and links in the program: you can take a look through them here, or just go to the generated file ```selects_YYYY-MM-DD.csv``` to look through them later. Following a search, each link is also sent to the system clipboard: I'd recommend a browser add-on like ["Open Multiple URLs"](https://addons.mozilla.org/en-US/firefox/addon/open-multiple-urls/) to go through the batch at once. All jobs and ratings are stored in ```joblist.pkl```, which you can export to csv at your leisure using the program.
 
 Roughly, this is what the program looks like:
 
 ```
-(S)crape new jobs or (L)oad old jobs? (S/L): s
+(S)crape new jobs, (L)oad old jobs, or (E)xport jobs?: s
 Number of days ago to search jobs? 1
 Retrieving results 1-15 for Janitor
 Last posting: 2022-10-20
@@ -99,7 +100,8 @@ Date Posted            2022-10-25 00:00:00
 Date Retrieved                  2022-11-02
 Name: 5, dtype: object
 Type an integer rating if interested. Enter or 0 to reject. (Q) to quit: q
-Selected jobs saved to selects.csv.
+Selected jobs saved to selects_2023-06-12.csv.
+Selected job links copied to clipboard.
                           Title                    Company Date Posted  ... Time Retrieved                                               Link Select
 3  Janitor with Driving License  Essential Results Limited  2022-10-26  ...       10:35:36  https://uk.indeed.com/viewjob?jk=0e591257c2b7f3ac    2.0
 0       Weekend Cleaner/Janitor       Hayward Services Ltd  2022-10-27  ...       10:41:32  https://uk.indeed.com/viewjob?jk=d6a6ea7051082f9d    1.0
