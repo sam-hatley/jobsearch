@@ -34,7 +34,7 @@ Bodyguard
 secret agent
 ```
 
-You may also want to edit the filters in a file called filters.txt, also in the same folder as main.py. These filters will remove jobs from consideration if they contain a word in the list. I have a few set for myself, but you should tailor this to your requirements. It should look something like the below, separated by ```,``` and with each word either in ```"double"``` or ```'single'``` quotes:
+You may also want to edit the filters in a file called filters.txt, also in the same folder as main.py. These filters will remove jobs from consideration if they contain a word in the list. I have a few set for myself, but you should tailor this to your requirements. It should look something like the below:
 
 ```python
 assistant
