@@ -4,3 +4,4 @@ Product Manager
 Digital Transformation
 Implementation Manager
 Junior Developer
+Junior Data
