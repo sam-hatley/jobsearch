@@ -77,29 +77,46 @@ Last posting: 2022-10-20
 Press enter to continue to job sorting or anything else to quit: 
 Number of days ago to display search results? 10
 
-Result 1 of 535:
+Result 1 of 535: Janitor
 Title             Weekend Cleaner/Janitor
 Company              Hayward Services Ltd
+Location                      London SW15
+Salary                     £18,642 a year
 Date Posted           2022-10-27 00:00:00
-Date Retrieved                 2022-11-02
 Name: 0, dtype: object
+
+Emptying waste bins or similar receptacles, transporting waste material to designated collection points.
+Scheduled spot checks of washroom facilities. Monitoring consumable levels and addressing any cleaning / hygiene issues.
+
 Type an integer rating if interested. Enter or 0 to reject. (Q) to quit: 1
 
-Result 2 of 535:
+
+Result 2 of 535: Janitor
 Title             Janitor with Driving License
 Company              Essential Results Limited
+Location                          Brighton BN1
+Salary                £20,500 - £22,700 a year
 Date Posted                2022-10-26 00:00:00
-Date Retrieved                      2022-11-02
 Name: 3, dtype: object
+
+In your new role as a Janitor with Driving License you will ensure equipment is kept clean, well maintained and in safe working order and meeting all agreed SLAs.
+
 Type an integer rating if interested. Enter or 0 to reject. (Q) to quit: 2
 
-Result 3 of 535:
+
+Result 3 of 535: Janitor
 Title                        Night Cleaner
 Company           Britannia Services Group
+Location                         Rochester
+Salary                         £11 an hour
 Date Posted            2022-10-25 00:00:00
-Date Retrieved                  2022-11-02
 Name: 5, dtype: object
+
+We are seeking a experienced cleaner to work Monday to Friday cleaning my clents premises in Isle of Grain Kent .
+Commercial cleaning: 1 year (preferred).
+
 Type an integer rating if interested. Enter or 0 to reject. (Q) to quit: q
+
 Selected jobs saved to selects_2023-06-12.csv.
 Selected job links copied to clipboard.
                           Title                    Company Date Posted  ... Time Retrieved                                               Link Select
