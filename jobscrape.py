@@ -92,12 +92,10 @@ def extract_jobs(soup):
         # Anything 'just posted' or 'today' will get timestamped for today
         if date_extr == "just posted" or date_extr == "today":
             date = date_now
-            date = date.strftime("%Y-%m-%d")
 
         # 'hiring ongoing' means it's been there for a while: we'll use 30 days
         elif date_extr == "hiring ongoing":
             date = date_now - datetime.timedelta(30)
-            date = date.strftime("%Y-%m-%d")
 
         # If it's anything else, it's either in the format 'posted {n} days ago'
         # or something we haven't seen before. Converting date to a list,
@@ -108,12 +106,12 @@ def extract_jobs(soup):
                 # This will generally fail if the posting was "30+" days ago.
                 if not date_list[1].isdigit():
                     date = date_now - datetime.timedelta(30)
-                    date = date.strftime("%Y-%m-%d")
                 else:
                     date = date_now - datetime.timedelta(int(date_list[1]))
-                    date = date.strftime("%Y-%m-%d")
             else:
                 date = date_now - datetime.timedelta(30)
+
+        date = date.strftime("%Y-%m-%d")
 
         # Rebuilding the link with an ID fetched earlier
         link = "https://uk.indeed.com/viewjob?jk=" + link_elem

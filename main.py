@@ -25,8 +25,8 @@ while True:
                 print("Please type an integer above 0")
 
         # Search for the queries
-        dict = job_search_time(queries, usr_in)
-        jobs_df = jobs_save(dict)
+        jobs_dict = job_search_time(queries, usr_in)
+        jobs_df = jobs_save(jobs_dict)
 
         cont = input(
             "\nPress enter to continue to job sorting or anything else to quit: "
@@ -76,9 +76,9 @@ except ValueError:
     if selects_df.empty:
         exit(0)
 
-print(
-    f"Selected jobs saved to selects_{datetime.datetime.now().strftime('%Y-%m-%d')}.csv."
-)
+# print(
+#     f"Selected jobs saved to selects_{datetime.datetime.now().strftime('%Y-%m-%d')}.csv."
+# )
 
 links_string = "\n".join([str(link) for link in selects_df["Link"]])
 pyperclip.copy(links_string)

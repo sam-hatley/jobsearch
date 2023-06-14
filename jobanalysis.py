@@ -1,6 +1,7 @@
 import os.path
 import os
 import pandas as pd
+import numpy as np
 from fuzzywuzzy import fuzz
 from datetime import datetime
 
@@ -16,8 +17,13 @@ def jobs_save(dict, keep="last"):
     if os.path.isfile("joblist.pkl"):
         old_jobs_df = pd.read_pickle("joblist.pkl")
         df = pd.concat([new_jobs_df, old_jobs_df])
+
         # Remove any entry with the same link
-        df = df.drop_duplicates(subset="Link", keep=keep)
+        df["Select"].replace("", np.nan, inplace=True)
+        df.sort_values(by=["Link", "Select"], na_position="last", inplace=True)
+        df.drop_duplicates(subset="Link", keep="first", inplace=True)
+        df["Select"].replace(np.nan, "", inplace=True)
+
     else:
         df = new_jobs_df
 
