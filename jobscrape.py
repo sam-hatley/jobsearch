@@ -185,14 +185,16 @@ def job_search_time(job_queries: list, days=1, testing: bool = 0):
                     last_date_list = strptime(ext_dates[-1], "%Y-%m-%d")
                     break
                 except BaseException as e:
-                    if retry >= 3:
+                    if retry == 2:
                         print(
-                            f"An error has occured. Results page {index + 1} for {query} has been skipped."
+                            f"An error has occured. Results page {index + 1} for {query} has been skipped. \n\
+                              error message: {e}"
                         )
                         with open("errorlog.html", "w") as f:
                             job_err = str(job_soup)
                             f.write(job_err)
                         print("HTML output saved to errorlog.html")
+                        retry += 1
                         break
                     else:
                         retry += 1
