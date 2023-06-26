@@ -155,6 +155,8 @@ def job_search_time(job_queries: list, days=1, testing: bool = 0):
 
     for query in job_queries:
         index = 0
+        total_retries = 0
+
         while index >= 0:
             # Restart driver every thirty pages
             if count % 30 == 0:
@@ -164,6 +166,13 @@ def job_search_time(job_queries: list, days=1, testing: bool = 0):
                 options.add_argument("--headless")
 
                 driver = uc.Chrome(version_main=114, options=options)
+
+            # Add'l error handling
+            if total_retries == 3:
+                print(
+                    f"Too many errors. Additional results for {query} have been skipped."
+                )
+                break
 
             print(f"Retrieving results page {index + 1} for {query}")
             # use test_page() for testing, scrape_joblist() for production
@@ -195,6 +204,7 @@ def job_search_time(job_queries: list, days=1, testing: bool = 0):
                             f.write(job_err)
                         print("HTML output saved to errorlog.html")
                         retry += 1
+                        total_retries += 1
                         break
                     else:
                         retry += 1

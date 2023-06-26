@@ -5,3 +5,5 @@ Digital Transformation
 Implementation Manager
 Junior Developer
 Junior Data
+Associate Data
+Data Governance
