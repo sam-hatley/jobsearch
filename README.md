@@ -75,7 +75,7 @@ Retrieving results 1-15 for Janitor
 Last posting: 2022-10-20
 
 Press enter to continue to job sorting or anything else to quit: 
-Number of days ago to display search results? 10
+Number of days ago to display search results? 1
 
 Result 1 of 535: Janitor
 Title             Weekend Cleaner/Janitor
