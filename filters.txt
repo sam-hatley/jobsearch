@@ -1,4 +1,14 @@
 bar
-senior
+buyer
 cabling
+dentist
+depot
+lecturer
+marketing
+nurse
+professor
+procurement
+research
+senior
 sales
+tutor

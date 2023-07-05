@@ -1,9 +1,9 @@
 Data Engineer
-Data Analyst
-Product Manager
-Digital Transformation
-Implementation Manager
-Junior Developer
 Junior Data
 Associate Data
-Data Governance
+Data Analyst
+Product Manager
+Junior Product
+Associate Product
+Digital Transformation
+Implementation Manager

@@ -1,3 +1,5 @@
+#!/home/sam/anaconda3/envs/jobsearch/bin/python python3
+
 from jobscrape import job_search_time
 from jobanalysis import *
 import datetime

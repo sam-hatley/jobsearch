@@ -172,6 +172,8 @@ def job_search_time(job_queries: list, days=1, testing: bool = 0):
                 print(
                     f"Too many errors. Additional results for {query} have been skipped."
                 )
+                print(f"Waiting 10 seconds...")
+                sleep(10)
                 break
 
             print(f"Retrieving results page {index + 1} for {query}")
@@ -209,6 +211,12 @@ def job_search_time(job_queries: list, days=1, testing: bool = 0):
                     else:
                         retry += 1
                         print("An error has occured. Attempting to retry...")
+                        driver.quit()
+
+                        options = uc.ChromeOptions()
+                        options.add_argument("--headless")
+                        driver = uc.Chrome(version_main=114, options=options)
+
                         sleep(5)
                         continue
 
