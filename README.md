@@ -43,7 +43,7 @@ director
 executive
 ```
 
-The program automatically filters jobs based on fuzzy matching between the job title and query you set up in ```jobs.txt```, which should remove the vast majority of irrevalant results. You can fine-tune this filter in line 58 of [jobanalysis.py](https://github.com/sam-hatley/jobsearch/blob/master/jobanalysis.py#L58), which is currently set to 75(%) using fuzzywuzzy's `token_set_ratio()`.
+The program automatically filters jobs based on fuzzy matching between the job title and query you set up in ```jobs.txt```, which should remove the vast majority of irrevalant results. You can fine-tune this filter in line 64 of [jobanalysis.py](https://github.com/sam-hatley/jobsearch/blob/master/jobanalysis.py#L64), which is currently set to 75(%) using fuzzywuzzy's `token_set_ratio()`.
 
 ### Files
 
