@@ -82,7 +82,7 @@ def jobs_sort(df, date):
         elif os.name == "nt":  # For Windows
             os.system("cls")
 
-        print(f'\n\nResult {i+1} of {len(df)+1}: {print_frame["Query"]}')
+        print(f'\n\nResult {i+1} of {len(df)}: {print_frame["Query"]}')
 
         print_frame = print_frame.drop(
             ["Link", "Datetime Retrieved", "Query", "Select", "Snippet"]
