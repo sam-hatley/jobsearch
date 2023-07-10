@@ -1,13 +1,18 @@
 # A Job Scraper for Indeed
 
 ## Background
-Going through job listings drives me a bit crazy, because most of what I'm trying to do could be sped up considerably if I wasn't dealing with a website's bare-bones UI.
+Going through job listings drives me a bit crazy, because most of what I'm trying to do could be sped up considerably if I wasn't dealing with indeed's, frankly, awful search.
 
 I wanted to improve on this process by writing a program that could actually deliver me the kinds of results I want, in the format I want it:
 
-1. A list of jobs with just the most basic information: title, company posting, and date posted
-2. Jobs that have been pre-filtered by keyword: I'm not looking to work as a receptionist, so I'd rather not see _any_ listing with that in the title
+1. A list of recently posted jobs with basic information: title, company, location, salarly, date posted, and a quick blurb
+2. Jobs that are better matched to the actual query I've put in: I'm not looking to work as a receptionist, so I'd rather not see _any_ listing with that in the title
 3. A way to quickly sort through and rank the jobs that have been posted.
+
+This program attempts to solve the above:
+1. It searches through indeed on a base query, given a time range
+2. The jobs are first filtered through a list of [user-supplied filters](/filters.txt), then filtered again by fuzzy matching the job title to the original query, catching the vast majority of unrelated results
+3. A very basic user interface allows you to look through the important bits of each job then rank each by preference. Following ranking, each job is copied to the system clipboard so that you may look at each selection in greater detail.
 
 ## Usage
 

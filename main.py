@@ -84,6 +84,5 @@ except ValueError:
 
 links_string = "\n".join([str(link) for link in selects_df["Link"]])
 pyperclip.copy(links_string)
-print("Selected job links copied to clipboard.")
-
 print(selects_df)
+print("Selected job links copied to clipboard.")
