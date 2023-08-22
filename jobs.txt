@@ -1,7 +1,5 @@
 Data Engineer
-Junior Data
-Associate Data
-Data Analyst
+Project Manager
 Product Manager
 Junior Product
 Associate Product
