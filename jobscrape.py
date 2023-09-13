@@ -175,6 +175,15 @@ def job_search_time(job_queries: list, days=1, testing: bool = 0):
                 print(f"Waiting 10 seconds...")
                 sleep(10)
                 break
+            
+            # Long run handling
+            if (index + 1) % 100 == 0:
+                cont_in = input(f"Reached page {index + 1} for {query}. (Y) to continue, (N) to break: ")
+                while cont_in.lower() not in ["y", "n"]:
+                    cont_in = input("Input (Y) to continue, (N) to break: ")
+                if cont_in.lower() == "n":
+                    break
+                    
 
             print(f"Retrieving results page {index + 1} for {query}")
             # use test_page() for testing, scrape_joblist() for production
