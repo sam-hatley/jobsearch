@@ -7,6 +7,19 @@ from time import sleep, strptime
 from random import randint
 
 
+def get_user_agent():
+    ua_list = [
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.3",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36 Edg/117.0.2045.47",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.3",
+    ]
+    rand = randint(0, 4)
+
+    return ua_list[rand]
+
+
 def scrape_joblist(driver, query, page, location=""):
     """Returns a (souped) page from indeed. Takes a job query string and
     starting number."""
@@ -15,8 +28,9 @@ def scrape_joblist(driver, query, page, location=""):
     url_vars = {"q": query, "l": location, "sort": "date", "start": page}
     url = "https://uk.indeed.com/jobs?" + urllib.parse.urlencode(url_vars)
 
-    # Get the page from the URL with cloudscraper to bypass cloudflare security
     # Moving this to the aggregate function
+
+    # Get the page from the URL with undetected_chromedriver to bypass cloudflare security
     # options = uc.ChromeOptions()
     # options.add_argument('--headless')
 
@@ -164,6 +178,7 @@ def job_search_time(job_queries: list, days=1, testing: bool = 0):
                     driver.quit()
                 options = uc.ChromeOptions()
                 options.add_argument("--headless")
+                options.add_argument(f"--user-agent={get_user_agent()}")
 
                 driver = uc.Chrome(version_main=114, options=options)
 
@@ -175,15 +190,16 @@ def job_search_time(job_queries: list, days=1, testing: bool = 0):
                 print(f"Waiting 10 seconds...")
                 sleep(10)
                 break
-            
+
             # Long run handling
             if (index + 1) % 100 == 0:
-                cont_in = input(f"Reached page {index + 1} for {query}. (Y) to continue, (N) to break: ")
+                cont_in = input(
+                    f"Reached page {index + 1} for {query}. (Y) to continue, (N) to break: "
+                )
                 while cont_in.lower() not in ["y", "n"]:
                     cont_in = input("Input (Y) to continue, (N) to break: ")
                 if cont_in.lower() == "n":
                     break
-                    
 
             print(f"Retrieving results page {index + 1} for {query}")
             # use test_page() for testing, scrape_joblist() for production
@@ -224,6 +240,8 @@ def job_search_time(job_queries: list, days=1, testing: bool = 0):
 
                         options = uc.ChromeOptions()
                         options.add_argument("--headless")
+                        options.add_argument(f"--user-agent={get_user_agent()}")
+
                         driver = uc.Chrome(version_main=114, options=options)
 
                         sleep(5)
