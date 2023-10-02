@@ -1,6 +1,6 @@
 pandas==2.0.0
 selenium==4.9.1
-undetected-chromedriver==3.4.7
+undetected-chromedriver==3.5.3
 fuzzywuzzy==0.18.0
 python-Levenshtein==0.21.0
 pyperclip==1.8.2
