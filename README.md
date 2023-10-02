@@ -23,7 +23,8 @@ The program is built in Python 3.9, and relies on the following external package
 | Package | Usage |
 | - | - |
 | Urllib | Dynamically builds URLs |
-| Selenium | Scrapes Indeed's website while bypassing CloudFlare's anti-bot protection |
+| Selenium | Scrapes the website |
+| undetected-chromedriver | Bypasses CloudFlare's anti-bot protection |
 | bs4 | BeautifulSoup: parses html files and retrieves text |
 | pandas | Manages and filters lists of selected jobs |
 | fuzzywuzzy | Applies fuzzy matching to job titles |
