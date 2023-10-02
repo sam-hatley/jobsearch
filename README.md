@@ -30,7 +30,9 @@ The program is built in Python 3.9, and relies on the following external package
 | fuzzywuzzy | Applies fuzzy matching to job titles |
 | pyperclip | Copies job links to clipboard after sorting |
 
-You'll also need to have a ```jobs.txt``` file in the same folder as main.py: it's a text file with a list of search queries, separated by line. If your query is more than one word, separate it with spaces or a "+". Case doesn't matter. It should look something like the below:
+You'll also need to have: 
+- Chrome or a [chromedriver](https://chromedriver.chromium.org/downloads) installed for undetected-chromedriver
+- a ```jobs.txt``` file in the same folder as main.py: it's a text file with a list of search queries, separated by line. If your query is more than one word, separate it with spaces or a "+". Case doesn't matter. It should look something like the below:
 
 ```
 Janitor
@@ -40,7 +42,7 @@ Bodyguard
 secret agent
 ```
 
-You may also want to edit the filters in a file called filters.txt, also in the same folder as main.py. These filters will remove jobs from consideration if they contain a word in the list. I have a few set for myself, but you should tailor this to your requirements. It should look something like the below:
+- You may also want to edit the filters in a file called filters.txt, also in the same folder as main.py. These filters will remove jobs from consideration if they contain a word in the list. I have a few set for myself, but you should tailor this to your requirements. It should look something like the below:
 
 ```python
 assistant
