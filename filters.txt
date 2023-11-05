@@ -9,7 +9,8 @@ buyer
 cabling
 café
 capital
-civilW
+chronic
+civil
 clearance
 clinical
 construction
@@ -18,6 +19,7 @@ controls
 defence
 dentist
 depot
+deputy
 deutsch
 director
 electrical
@@ -55,10 +57,12 @@ pricing
 procurement
 production
 professor
+recruitment
 research
 retrofit
 roofing
 sales
+senior
 solar
 solicitor
 spanish

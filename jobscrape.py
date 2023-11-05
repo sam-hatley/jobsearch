@@ -15,9 +15,9 @@ def get_user_agent():
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36 Edg/117.0.2045.47",
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.3",
     ]
-    rand = randint(0, 4)
+    rand_ua = randint(0, 4)
 
-    return ua_list[rand]
+    return ua_list[rand_ua]
 
 
 def scrape_joblist(driver, query, page, location=""):
@@ -76,8 +76,8 @@ def extract_jobs(soup):
     # we need.
     for jobcard in jobcards:
         title_elem = jobcard.find("h2", class_="jobTitle")
-        company_elem = jobcard.find("span", class_="companyName")
-        location_elem = jobcard.find("div", class_="companyLocation")
+        company_elem = jobcard.find("span", {"data-testid": "company-name"})
+        location_elem = jobcard.find("div", {"data-testid": "text-location"})
         salary_elem = jobcard.find("div", class_="salary-snippet-container")
         date_elem = jobcard.find("span", class_="date")
         link_elem = jobcard.find("a").get("data-jk")
