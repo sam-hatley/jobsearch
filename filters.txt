@@ -22,6 +22,7 @@ depot
 deputy
 deutsch
 director
+duty manager
 electrical
 energy
 events
@@ -31,11 +32,13 @@ freelance
 ftc
 german
 glazing
+gym manager
 head
 healthcare
 investment
 installation
 interim
+it manager
 joinery
 lecturer
 loan
@@ -51,20 +54,27 @@ oncology
 parts
 payroll
 physician
+ppc manager
+pr manager
 practice
 practitioner
 pricing
 procurement
 production
 professor
+project manager
+property manager
+pub manager
+qa manager
 recruitment
 research
 retrofit
 roofing
 sales
-senior
+SEO Manager
 solar
 solicitor
+spa manager
 spanish
 senior data
 senior it
