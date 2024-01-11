@@ -81,7 +81,7 @@ def extract_jobs(soup):
         salary_elem = jobcard.find("div", class_="salary-snippet-container")
         date_elem = jobcard.find("span", class_="date")
         link_elem = jobcard.find("a").get("data-jk")
-        snippet_elem = jobcard.find("div", class_="job-snippet")
+        snippet_elem = jobcard.find("tr", class_="underShelfFooter")
 
         # Cleaning the elements to get what we need
         title = title_elem.get_text()
@@ -91,7 +91,17 @@ def extract_jobs(soup):
             salary = salary_elem.get_text()
         else:
             salary = "nan"
-        snippet = snippet_elem.get_text()
+
+        # Updated snippet CSS makes this considerably harder: old method below
+        # snippet = snippet_elem.get_text()
+        snippet_elem_list = snippet_elem.get_text().splitlines()
+        if len(snippet_elem_list) > 2:
+            snippet_elem_list.pop(0)
+            snippet_elem_list.pop(-1)
+
+        snippet = ""
+        for line in snippet_elem_list:
+            snippet += f"{line} "
 
         # Removing an extra 'Posted' in some date entries
         try:
