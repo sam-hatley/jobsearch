@@ -79,7 +79,7 @@ def extract_jobs(soup):
         company_elem = jobcard.find("span", {"data-testid": "company-name"})
         location_elem = jobcard.find("div", {"data-testid": "text-location"})
         salary_elem = jobcard.find("div", class_="salary-snippet-container")
-        date_elem = jobcard.find("span", class_="date")
+        date_elem = jobcard.find("span", {"data-testid": "myJobsStateDate"})
         link_elem = jobcard.find("a").get("data-jk")
         snippet_elem = jobcard.find("tr", class_="underShelfFooter")
 
@@ -103,22 +103,17 @@ def extract_jobs(soup):
         for line in snippet_elem_list:
             snippet += f"{line} "
 
-        # Removing an extra 'Posted' in some date entries
-        try:
-            for span in date_elem.findAll("span", class_="visually-hidden"):
-                span.replace_with("")
-        except:
-            continue
-
         # Converting the posted date into a usable format now
         date_extr = date_elem.get_text().lower()
+        if date_extr.count("posted") > 1:
+            date_extr = date_extr[6:]
 
         # Anything 'just posted' or 'today' will get timestamped for today
         if date_extr == "just posted" or date_extr == "today":
             date = date_now
 
         # 'hiring ongoing' means it's been there for a while: we'll use 30 days
-        elif date_extr == "hiring ongoing":
+        elif date_extr == "hiring ongoing" or date_extr == "active today":
             date = date_now - datetime.timedelta(30)
 
         # If it's anything else, it's either in the format 'posted {n} days ago'

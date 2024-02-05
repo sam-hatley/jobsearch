@@ -20,9 +20,11 @@ defence
 dentist
 depot
 deputy
+designer
 deutsch
 director
 duty manager
+ehs manager
 electrical
 energy
 events
@@ -54,6 +56,7 @@ oncology
 parts
 payroll
 physician
+pmo manager
 ppc manager
 pr manager
 practice

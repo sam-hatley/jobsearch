@@ -2,7 +2,3 @@ Product Manager
 Product Owner
 Junior Product
 Associate Product
-Business Intelligence
-Data Analyst
-Implementation Manager
-User Research
