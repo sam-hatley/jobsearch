@@ -105,7 +105,7 @@ def extract_jobs(soup):
 
         # Converting the posted date into a usable format now
         date_extr = date_elem.get_text().lower()
-        if date_extr.count("posted") > 1:
+        if date_extr.startswith("posted"):
             date_extr = date_extr[6:]
 
         # Anything 'just posted' or 'today' will get timestamped for today
